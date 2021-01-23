@@ -1,0 +1,26 @@
+---
+- name: httpd
+  hosts: DB
+  become: true
+  tasks:
+    - name: install httpd
+      yum:
+          name: httpd
+          state: latest
+
+    - name: run httpd
+      service:
+           name: httpd
+           state: started
+
+    - name: content
+      copy:
+           content: "Hi...This is vipin"
+           dest: /var/www/html/index.html
+
+    - name: add port
+      firewalld:
+               port: 80/tcp
+               zone: public
+               permanent: true
+               state: enabled
